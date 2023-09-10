@@ -5,11 +5,17 @@
 #define WIDTH 800
 #define HEIGHT 600
 
+#ifdef UNIX
+    #define CLS system("clear")
+#elif _WIN32
+    #define CLS system("cls")
+#endif
+
 void drawTriangle();
 
 int main()
 {
-    system("clear");
+    CLS;
     glfwInit();
 
 
