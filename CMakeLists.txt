@@ -2,6 +2,17 @@ cmake_minimum_required(VERSION 3.8)
 
 project("Shaders")
 
+# macro(copy_directory src dst)
+    # execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${src} ${dst}
+        # RESULT_VARIABLE ret
+        # OUTPUT_VARIABLE out
+        # ERROR_VARIABLE  err
+    # )
+    # if(ret)
+        # message(FATAL_ERROR "ERROR ---> could not be copied: ${err}")
+    # endif()
+# endmacro()
+
 if (UNIX)
     set(GLFW_DIR "/home/den/glfw-3.3.8")
     set(GLAD_DIR "/home/den/glad")
@@ -28,3 +39,5 @@ if (UNIX)
 else()
     target_link_libraries(Main ${GLFW_DIR}/src/Debug/glfw3.lib)
 endif()
+
+#copy_directory("Shaders" "build/Debug")

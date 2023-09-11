@@ -14,7 +14,8 @@ private:
 
 private:
     GLuint compileShader(GLenum shaderType, std::string& src);
-    GLuint createProgram(GLuint shaderID);
+    GLuint createProgram();
+    void use();
 
 public:
     Shader(const std::string& fragFileName, const std::string& vertFileName);

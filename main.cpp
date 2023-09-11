@@ -1,6 +1,7 @@
 #include <iostream>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "Shader.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -37,6 +38,8 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     glTranslatef(0.f, 0.f, -5.f);
+
+    Shader shader("Shaders/shader.frag", "");
 
     while (!glfwWindowShouldClose(wnd))
     {
