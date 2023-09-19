@@ -17,9 +17,15 @@ GLuint Shader::compileShader(GLenum shaderType, std::string& src)
 
     if (!isCompiled)
     {
+        char shaderTitle[16];
+        if (shaderType == GL_VERTEX_SHADER)
+            memcpy(shaderTitle, "VERTEX", sizeof("VERTEX"));
+        else
+            memcpy(shaderTitle, "FRAGMENT", sizeof("FRAGMENT"));
+        
         glGetShaderInfoLog(shader, 512, 0, log);
         glDeleteShader(shader);
-        printf("Error while compiling shader: \n%s", log);
+        printf("Error while compiling %s shader: \n%s", shaderTitle, log);
         shader = 0;
     }
 
@@ -58,13 +64,22 @@ GLuint Shader::createProgram()
     return progID;
 }
 
-void Shader::use()
+void Shader::unload()
 {
-    glUseProgram(_program);
+    glUseProgram(0);
+
+    glDeleteShader(_vertex);
+    glDeleteShader(_fragment);
+
+    glDeleteProgram(_program);
 }
 
-Shader::Shader(const std::string& fragFileName, const std::string& vertFileName)
+void Shader::reload(const std::string& fragFileName, const std::string& vertFileName)
 {
+    unload();
+    _vertexSrc = "";
+    _fragmentSrc = "";
+
     ifstream fragFile(fragFileName, ios::binary);
     char chr = 0;
 
@@ -90,7 +105,7 @@ Shader::Shader(const std::string& fragFileName, const std::string& vertFileName)
     vertexFile.close();
 
 
-    //_vertex = compileShader(GL_VERTEX_SHADER, _vertexSrc);
+    _vertex = compileShader(GL_VERTEX_SHADER, _vertexSrc);
     _fragment = compileShader(GL_FRAGMENT_SHADER, _fragmentSrc);
 
     _program = createProgram();
@@ -98,12 +113,22 @@ Shader::Shader(const std::string& fragFileName, const std::string& vertFileName)
     use();
 }
 
+GLint Shader::getUniformAttr(const char* uniformName)
+{
+    return glGetUniformLocation(_program, uniformName);
+}
+
+void Shader::use()
+{
+    glUseProgram(_program);
+}
+
+Shader::Shader(const std::string& fragFileName, const std::string& vertFileName)
+{
+    reload(fragFileName, vertFileName);
+}
+
 Shader::~Shader()
 {
-    glUseProgram(0);
-
-    glDeleteShader(_vertex);
-    glDeleteShader(_fragment);
-
-    glDeleteProgram(_program);
+    unload();
 }

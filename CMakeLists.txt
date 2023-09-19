@@ -21,7 +21,10 @@ else()
     set(GLAD_DIR "E:/C++/glad")
 endif()
 
+set(GLM_DIR "E:/C++/glm-0.9.9.8/glm/cmake/glm")
+
 find_package(OpenGL REQUIRED)
+find_package(GLM REQUIRED)
 
 add_executable(Main "main.cpp" "Shader.h" "Shader.cpp")
 add_library(GLAD ${GLAD_DIR}/src/glad.c)
@@ -29,6 +32,7 @@ add_library(GLAD ${GLAD_DIR}/src/glad.c)
 target_include_directories(GLAD PUBLIC ${GLAD_DIR}/include)
 target_include_directories(Main PUBLIC ${OPENGL_INCLUDE_DIRS})
 target_include_directories(Main PUBLIC ${GLFW_DIR}/include)
+target_include_directories(Main PUBLIC ${GLM_INCLUDE_DIRS})
 
 target_link_libraries(Main ${OPENGL_LIBRARIES})
 target_link_libraries(Main GLAD)
