@@ -15,11 +15,13 @@
 #define WIDTH 800
 #define HEIGHT 600
 
-#ifdef UNIX
+#ifdef unix
     #define CLS system("clear")
 #elif _WIN32
     #define CLS system("cls")
 #endif
+
+using Clock = std::chrono::steady_clock;
 
 void resizeWnd(GLFWwindow* wnd, int width, int height);
 void inputCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
@@ -27,6 +29,9 @@ void inputCallback(GLFWwindow *window, int key, int scancode, int action, int mo
 Shader shader;
 
 glm::mat4 trans(1.f);
+
+auto timeSinceLastFrame = Clock::now();
+auto timeSinceLastFrameMs = 0.f;
 
 int main()
 {
@@ -69,7 +74,6 @@ int main()
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_DEPTH_TEST);
 
-    using Clock = std::chrono::steady_clock;
     auto timer = Clock::now();
 
     while (!glfwWindowShouldClose(wnd))
@@ -77,9 +81,9 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 0.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        float timeElapsed = std::chrono::duration_cast< std::chrono::duration <float, std::ratio<1i64, 1i64>> >(Clock::now() - timer).count();
-        // if (timeElapsed > 60)
-        //     timer = Clock::now();
+        float timeElapsed = std::chrono::duration_cast< std::chrono::duration <float, std::ratio<1, 1>> >(Clock::now() - timer).count();
+        timeSinceLastFrameMs = std::chrono::duration_cast< std::chrono::duration<float, std::milli> >(Clock::now() - timeSinceLastFrame).count();
+        timeSinceLastFrame = Clock::now();
 
         //printf("Time elapsed %f\n", timeElapsed);
         
@@ -142,22 +146,24 @@ void inputCallback(GLFWwindow *window, int key, int scancode, int action, int mo
 
     }
 
+    constexpr int k = 5;
+
     if (key == GLFW_KEY_LEFT)
     {
-        trans = glm::rotate(trans, angleRadian, glm::vec3(0.f, 0.f, 1.f));
+        trans = glm::rotate(trans, angleRadian * timeSinceLastFrameMs * k, glm::vec3(0.f, 0.f, 1.f));
     }
     else if (key == GLFW_KEY_RIGHT)
     {
-        trans = glm::rotate(trans, -angleRadian, glm::vec3(0.f, 0.f, 1.f));
+        trans = glm::rotate(trans, -angleRadian * timeSinceLastFrameMs * k, glm::vec3(0.f, 0.f, 1.f));
     }
 
     if (key == GLFW_KEY_UP)
     {
-        trans = glm::rotate(trans, angleRadian, glm::vec3(1.f, 0.f, 0.f));
+        trans = glm::rotate(trans, angleRadian * timeSinceLastFrameMs * k, glm::vec3(1.f, 0.f, 0.f));
     }
     else if (key == GLFW_KEY_DOWN)
     {
-        trans = glm::rotate(trans, -angleRadian, glm::vec3(1.f, 0.f, 0.f));
+        trans = glm::rotate(trans, -angleRadian * timeSinceLastFrameMs * k, glm::vec3(1.f, 0.f, 0.f));
     }
 
 }

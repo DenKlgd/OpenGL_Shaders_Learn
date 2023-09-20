@@ -1,3 +1,4 @@
+#include <cstring>
 #include "Shader.h"
 
 using std::string;
@@ -19,9 +20,9 @@ GLuint Shader::compileShader(GLenum shaderType, std::string& src)
     {
         char shaderTitle[16];
         if (shaderType == GL_VERTEX_SHADER)
-            memcpy(shaderTitle, "VERTEX", sizeof("VERTEX"));
+            std::memcpy(shaderTitle, "VERTEX", sizeof("VERTEX"));
         else
-            memcpy(shaderTitle, "FRAGMENT", sizeof("FRAGMENT"));
+            std::memcpy(shaderTitle, "FRAGMENT", sizeof("FRAGMENT"));
         
         glGetShaderInfoLog(shader, 512, 0, log);
         glDeleteShader(shader);

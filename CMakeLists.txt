@@ -16,15 +16,16 @@ project("Shaders")
 if (UNIX)
     set(GLFW_DIR "/home/den/glfw-3.3.8")
     set(GLAD_DIR "/home/den/glad")
+    set(GLM_INCLUDE_DIRS "glm/glm")
 else()
     set(GLFW_DIR "E:/C++/glfw-3.3.8")
     set(GLAD_DIR "E:/C++/glad")
+    set(GLM_DIR "E:/C++/glm-0.9.9.8/glm/cmake/glm")
+    find_package(GLM REQUIRED)
 endif()
 
-set(GLM_DIR "E:/C++/glm-0.9.9.8/glm/cmake/glm")
 
 find_package(OpenGL REQUIRED)
-find_package(GLM REQUIRED)
 
 add_executable(Main "main.cpp" "Shader.h" "Shader.cpp")
 add_library(GLAD ${GLAD_DIR}/src/glad.c)
