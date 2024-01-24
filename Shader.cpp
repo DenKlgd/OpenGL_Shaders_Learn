@@ -123,6 +123,11 @@ void Shader::use()
     glUseProgram(_program);
 }
 
+void Shader::unuse()
+{
+    glUseProgram(0);
+}
+
 Shader::Shader(const std::string& fragFileName, const std::string& vertFileName)
 {
     reload(fragFileName, vertFileName);

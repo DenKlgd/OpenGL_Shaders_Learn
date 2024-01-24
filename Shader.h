@@ -21,6 +21,7 @@ public:
     void reload(const std::string& fragFileName, const std::string& vertFileName);
     GLint getUniformAttr(const char* uniformName);
     void use();
+    void unuse();
     Shader() = default;
     Shader(const std::string& fragFileName, const std::string& vertFileName);
     ~Shader();
